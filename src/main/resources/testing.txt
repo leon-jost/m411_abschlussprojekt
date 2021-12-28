@@ -1,0 +1,26 @@
+// alle möglichen Routen
+[Position{x=1, y=1}, Position{x=3, y=3}, Position{x=2, y=2}, Position{x=3, y=2}, Position{x=1, y=1}]
+7.4787086646190755
+2.8 + 1.4 + 1 + 2.3 = 7.25 // von Hand nachgeprüft
+
+[Position{x=1, y=1}, Position{x=3, y=3}, Position{x=3, y=2}, Position{x=2, y=2}, Position{x=1, y=1}]
+6.242640687119285
+
+[Position{x=1, y=1}, Position{x=2, y=2}, Position{x=3, y=3}, Position{x=3, y=2}, Position{x=1, y=1}]
+6.06449510224598
+
+[Position{x=1, y=1}, Position{x=2, y=2}, Position{x=3, y=2}, Position{x=3, y=3}, Position{x=1, y=1}]
+6.242640687119286
+
+[Position{x=1, y=1}, Position{x=3, y=2}, Position{x=3, y=3}, Position{x=2, y=2}, Position{x=1, y=1}]
+6.06449510224598
+
+[Position{x=1, y=1}, Position{x=3, y=2}, Position{x=2, y=2}, Position{x=3, y=3}, Position{x=1, y=1}]
+7.4787086646190755
+
+// generierte Distanzmatrix
+0.0 			2.23606797749979 2.8284271247461903 	1.4142135623730951 
+2.23606797749979 	0.0 		 1.0 			1.0 
+2.8284271247461903 	1.0 		 0.0 			1.4142135623730951 
+1.4142135623730951 	1.0 		 1.4142135623730951 	0.0
+

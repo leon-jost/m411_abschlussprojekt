@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class TravellingSalesman {
-    public static ArrayList<Position> positions = new ArrayList<>(Arrays.asList(new Position(1, 1), new Position(3, 2), new Position(3, 3), new Position(2, 2)));
+    public static ArrayList<Position> positions = new ArrayList<>(Arrays.asList(new Position(1, 1), new Position(3, 2), new Position(1, 4), new Position(3, 4)));
+    // als Startpunkt wird immer das erste Element der "positions" Liste genommen
+    private static Position startpunkt = positions.get(0);
     private static ArrayList<List<Position>> allPossibleRoutes = new ArrayList<>();
     private static ArrayList<Route> allCorrectPossibleRoutes = new ArrayList<>();
 
@@ -16,9 +18,9 @@ public class TravellingSalesman {
         // alle möglichen Kombinationen generieren (rekursive Methode)
         generateAllPossibleCombinations(new HashSet<>(positions), new ArrayList<>());
 
-        // nur die Routen nehmen, welche mit dem Startpunkt beginen (als Startpunkt wird immer das erste Element der "positions" Liste genommen
+        // nur die Routen nehmen, welche mit dem Startpunkt beginen
         for (List<Position> route : allPossibleRoutes) {
-            if (route.get(0).x == 1 && route.get(0).y == 1) {
+            if (route.get(0).x == startpunkt.x && route.get(0).y == startpunkt.y) {
                 allCorrectPossibleRoutes.add(new Route(route));
             }
         }
@@ -37,7 +39,7 @@ public class TravellingSalesman {
 
         // sortierte Rangliste erstellen
         Comparator<Route> compareByTotalDistance = Comparator.comparing(Route::getTotalDistance);
-        allCorrectPossibleRoutes.sort(compareByTotalDistance.reversed());
+        allCorrectPossibleRoutes.sort(compareByTotalDistance);
 
         // top 3 Rangliste ausgeben und in File speichern
         StringBuilder newFileContent = new StringBuilder();
@@ -45,7 +47,7 @@ public class TravellingSalesman {
             // ausgeben
             System.out.println("Rang " + (i + 1));
             System.out.println("Route: " + allCorrectPossibleRoutes.get(i).getPositions());
-            System.out.println("Totaldistanz: " + allCorrectPossibleRoutes.get(i).getTotalDistance());
+            System.out.println("Totaldistanz: " + String.format("%.2f", allCorrectPossibleRoutes.get(i).getTotalDistance()));
             System.out.println();
 
             // Inhalt für File generieren
@@ -53,7 +55,7 @@ public class TravellingSalesman {
             newFileContent.append("\n");
             newFileContent.append("Route: ").append(allCorrectPossibleRoutes.get(i).getPositions());
             newFileContent.append("\n");
-            newFileContent.append("Totaldistanz: ").append(allCorrectPossibleRoutes.get(i).getTotalDistance());
+            newFileContent.append("Totaldistanz: ").append(String.format("%.2f", allCorrectPossibleRoutes.get(i).getTotalDistance()));
             newFileContent.append("\n\n");
         }
 
@@ -66,12 +68,12 @@ public class TravellingSalesman {
             e.printStackTrace();
         }
 
-        // --- Distanzmatrix generieren zum manuellen Überprüfen ---
+        // --- Distanzmatrix generieren zur manuellen Überprüfung ---
         // distanzen berechnen
         for (Position from : positions) {
             for (Position to : positions) {
-                int x;
-                int y;
+                double x;
+                double y;
                 // x
                 if (from.x > to.x) {
                     x = from.x - to.x;
@@ -88,12 +90,6 @@ public class TravellingSalesman {
                 double distance;
                 distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
                 distanceMatrixResults.add(distance);
-
-                // zum Debuggen
-                /*from.print();
-                to.print();
-                System.out.println(x + " => " + y);
-                System.out.println("distance: " + distance);*/
             }
         }
 
@@ -106,16 +102,14 @@ public class TravellingSalesman {
             }
         }
 
-        // Distanzmatrix generieren
-
-
-        // zum debuggen
-        /*for (int row = 0; row < distanceMatrix.length; row++) {
+        // Distanzmatrix generieren und ausgeben
+        System.out.println("Distanzmatrix zum kontrollieren:");
+        for (int row = 0; row < distanceMatrix.length; row++) {
             for (int col = 0; col < distanceMatrix[row].length; col++) {
-                System.out.print(distanceMatrix[row][col] + " ");
+                System.out.print(String.format("%.2f", distanceMatrix[row][col]) + " ");
             }
             System.out.println();
-        }*/
+        }
     }
 
     private static void generateAllPossibleCombinations(Set<Position> todoPositions, List<Position> donePositions) {
@@ -123,6 +117,7 @@ public class TravellingSalesman {
             // measure distance
             double totalDistance = 0;
             for (int i = 0; i < donePositions.size(); i++) {
+                double temp = donePositions.get(i).distance(donePositions.get((i + 1) % donePositions.size()));
                 totalDistance += donePositions.get(i).distance(donePositions.get((i + 1) % donePositions.size()));
             }
             //System.out.println("Solution found");
@@ -134,7 +129,7 @@ public class TravellingSalesman {
                 clonedDonePositions.add(new Position(position.x, position.y));
             }
             // startpunkt dazufügen (zurück an die startposition)
-            clonedDonePositions.add(new Position(1, 1));
+            clonedDonePositions.add(new Position(startpunkt.x, startpunkt.y));
 
             // die fertiggestellte route hinzufügen
             allPossibleRoutes.add(clonedDonePositions);

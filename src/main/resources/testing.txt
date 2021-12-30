@@ -1,26 +1,28 @@
-// alle möglichen Routen
-[Position{x=1, y=1}, Position{x=3, y=3}, Position{x=2, y=2}, Position{x=3, y=2}, Position{x=1, y=1}]
-7.4787086646190755
-2.8 + 1.4 + 1 + 2.3 = 7.25 // von Hand nachgeprüft
+// top 3 Routen
+Rang 1
+Route: [Position{x=1, y=1}, Position{x=1, y=4}, Position{x=3, y=2}, Position{x=3, y=4}, Position{x=1, y=1}]
+Totaldistanz: 11.43
 
-[Position{x=1, y=1}, Position{x=3, y=3}, Position{x=3, y=2}, Position{x=2, y=2}, Position{x=1, y=1}]
-6.242640687119285
+// manuell ausgerechnet (mithilfe von Distanzmatrix) (stimmt nicht ganz wegen Rundung)
+3 + 2.84 + 2 + 3.61 = 11.45
 
-[Position{x=1, y=1}, Position{x=2, y=2}, Position{x=3, y=3}, Position{x=3, y=2}, Position{x=1, y=1}]
-6.06449510224598
+Rang 2
+Route: [Position{x=1, y=1}, Position{x=3, y=4}, Position{x=3, y=2}, Position{x=1, y=4}, Position{x=1, y=1}]
+Totaldistanz: 11.43
 
-[Position{x=1, y=1}, Position{x=2, y=2}, Position{x=3, y=2}, Position{x=3, y=3}, Position{x=1, y=1}]
-6.242640687119286
+// manuell ausgerechnet (mithilfe von Distanzmatrix) (stimmt nicht ganz wegen Rundung)
+3.61 + 2 + 2.83 + 3 = 11.44
 
-[Position{x=1, y=1}, Position{x=3, y=2}, Position{x=3, y=3}, Position{x=2, y=2}, Position{x=1, y=1}]
-6.06449510224598
+Rang 3
+Route: [Position{x=1, y=1}, Position{x=3, y=4}, Position{x=1, y=4}, Position{x=3, y=2}, Position{x=1, y=1}]
+Totaldistanz: 10.67
 
-[Position{x=1, y=1}, Position{x=3, y=2}, Position{x=2, y=2}, Position{x=3, y=3}, Position{x=1, y=1}]
-7.4787086646190755
+// manuell ausgerechnet (mithilfe von Distanzmatrix) (stimmt nicht ganz wegen Rundung)
+3.61 + 2 + 2.83 + 2.24 = 10.68
 
 // generierte Distanzmatrix
-0.0 			2.23606797749979 2.8284271247461903 	1.4142135623730951 
-2.23606797749979 	0.0 		 1.0 			1.0 
-2.8284271247461903 	1.0 		 0.0 			1.4142135623730951 
-1.4142135623730951 	1.0 		 1.4142135623730951 	0.0
+0.00 2.24 3.00 3.61
+2.24 0.00 2.83 2.00
+3.00 2.83 0.00 2.00
+3.61 2.00 2.00 0.00
 

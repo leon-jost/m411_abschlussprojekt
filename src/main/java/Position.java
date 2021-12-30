@@ -19,9 +19,9 @@ public class Position {
                 '}';
     }
 
-    public double distance(Position point) {
-        int distance_x = Math.abs(x - point.x);
-        int distance_y = Math.abs(y - point.y);
+    public double distance(Position position) {
+        int distance_x = Math.abs(x - position.x);
+        int distance_y = Math.abs(y - position.y);
         return Math.sqrt((distance_x * distance_x) + (distance_y * distance_y));
     }
 }

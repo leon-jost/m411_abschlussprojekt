@@ -1,20 +1,52 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class TravellingSalesman {
-    public static ArrayList<Position> positions = new ArrayList<>(Arrays.asList(new Position(1, 1), new Position(3, 2), new Position(1, 4), new Position(3, 4)));
-    // als Startpunkt wird immer das erste Element der "positions" Liste genommen
-    private static Position startpunkt = positions.get(0);
+    public static ArrayList<Position> positions = new ArrayList<>();
+    private static Position startpunkt;
     private static ArrayList<List<Position>> allPossibleRoutes = new ArrayList<>();
     private static ArrayList<Route> allCorrectPossibleRoutes = new ArrayList<>();
 
-    public static double[][] distanceMatrix = new double[positions.size()][positions.size()];
+    public static double[][] distanceMatrix;
     public static ArrayList<Double> distanceMatrixResults = new ArrayList<>();
 
     public static void main(String[] args) {
-        // --- Travelling Salesman lösen ---
+        // --- Vorbereitungen ---
+
+        // Filepfad von von Konsole lesen/anfordern
+        boolean readFileSuccessful = false;
+        while(!readFileSuccessful) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Pfad zum File angeben (absoluter Pfad): ");
+            String fileLocation = scanner.nextLine();
+
+            // Koordinaten von File einlesen und in ArrayList speichern
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileLocation))) {
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    ArrayList<String> coordinatePairs = new ArrayList<>();
+                    Collections.addAll(coordinatePairs, line.split(";"));
+                    for (String coordinatePair : coordinatePairs) {
+                        positions.add(new Position(Integer.parseInt(coordinatePair.substring(0, coordinatePair.indexOf(","))), Integer.parseInt(coordinatePair.substring(coordinatePair.indexOf(",") + 1))));
+                    }
+                    line = bufferedReader.readLine();
+                }
+
+                readFileSuccessful = true;
+            } catch (IOException e) {
+                System.out.println("Das File konnte entweder nicht gefunden werden, oder die Koordinaten haben ein falsches Format/Syntax.");
+                readFileSuccessful = false;
+            }
+        }
+
+        // als Startpunkt wird immer das erste Element der "positions" Liste genommen
+        startpunkt = positions.get(0);
+
+        // Distanzmatrix für späteren Gebrach initialisieren.
+        distanceMatrix = new double[positions.size()][positions.size()];
+
+        // --- Travelling Salesman lösen   ---
+
         // alle möglichen Kombinationen generieren (rekursive Methode)
         generateAllPossibleCombinations(new HashSet<>(positions), new ArrayList<>());
 
@@ -69,6 +101,7 @@ public class TravellingSalesman {
         }
 
         // --- Distanzmatrix generieren zur manuellen Überprüfung ---
+
         // distanzen berechnen
         for (Position from : positions) {
             for (Position to : positions) {
@@ -114,14 +147,11 @@ public class TravellingSalesman {
 
     private static void generateAllPossibleCombinations(Set<Position> todoPositions, List<Position> donePositions) {
         if (todoPositions.isEmpty()) {
-            // measure distance
+            // Distanz berechnen
             double totalDistance = 0;
             for (int i = 0; i < donePositions.size(); i++) {
-                double temp = donePositions.get(i).distance(donePositions.get((i + 1) % donePositions.size()));
                 totalDistance += donePositions.get(i).distance(donePositions.get((i + 1) % donePositions.size()));
             }
-            //System.out.println("Solution found");
-            //System.out.println("\t" + donePositions);
 
             // positionen klonen
             ArrayList<Position> clonedDonePositions = new ArrayList<>();
@@ -133,18 +163,17 @@ public class TravellingSalesman {
 
             // die fertiggestellte route hinzufügen
             allPossibleRoutes.add(clonedDonePositions);
-            //System.out.println("\t" + totalDistance);
         } else {
             for (Position nextPosition : todoPositions) {
-                // add position
+                // Position hinzufügen
                 donePositions.add(nextPosition);
 
-                // recurse
+                // rekursieren
                 Set<Position> tmp = new HashSet<>(todoPositions);
                 tmp.remove(nextPosition);
                 generateAllPossibleCombinations(tmp, donePositions);
 
-                // remove position
+                // Position entfernen
                 donePositions.remove(nextPosition);
             }
         }
